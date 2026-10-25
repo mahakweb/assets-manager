@@ -1,0 +1,6 @@
+{
+  "name": "سامانه جامع مدیریت دارایی‌های سازمان",
+  "description": "سامانه جامع و پرتابل مدیریت دارایی‌ها، تجهیزات، سامانه‌ها و پرسنل سازمانی همراه با ایمپورت و اکسپورت اکسل و گزارش‌گیری تحلیلی",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

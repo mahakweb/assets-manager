@@ -1,0 +1,117 @@
+@import "tailwindcss";
+
+/* Yekan Bakh Font Definitions */
+@font-face {
+  font-family: 'Yekan Bakh';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: local('Yekan Bakh Light'), local('YekanBakh-Light'),
+       url('https://cdn.jsdelivr.net/gh/vahid-r/yekan-bakh@master/dist/fonts/woff2/YekanBakh-Light.woff2') format('woff2'),
+       url('https://cdn.jsdelivr.net/gh/vahid-r/yekan-bakh@master/dist/fonts/woff/YekanBakh-Light.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Yekan Bakh';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Yekan Bakh Regular'), local('YekanBakh-Regular'), local('Yekan Bakh'), local('Yekan'),
+       url('https://cdn.jsdelivr.net/gh/vahid-r/yekan-bakh@master/dist/fonts/woff2/YekanBakh-Regular.woff2') format('woff2'),
+       url('https://cdn.jsdelivr.net/gh/vahid-r/yekan-bakh@master/dist/fonts/woff/YekanBakh-Regular.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Yekan Bakh';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Yekan Bakh SemiBold'), local('YekanBakh-SemiBold'),
+       url('https://cdn.jsdelivr.net/gh/vahid-r/yekan-bakh@master/dist/fonts/woff2/YekanBakh-SemiBold.woff2') format('woff2'),
+       url('https://cdn.jsdelivr.net/gh/vahid-r/yekan-bakh@master/dist/fonts/woff/YekanBakh-SemiBold.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Yekan Bakh';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Yekan Bakh Bold'), local('YekanBakh-Bold'),
+       url('https://cdn.jsdelivr.net/gh/vahid-r/yekan-bakh@master/dist/fonts/woff2/YekanBakh-Bold.woff2') format('woff2'),
+       url('https://cdn.jsdelivr.net/gh/vahid-r/yekan-bakh@master/dist/fonts/woff/YekanBakh-Bold.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Yekan Bakh';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: local('Yekan Bakh ExtraBold'), local('YekanBakh-ExtraBold'), local('Yekan Bakh Fat'),
+       url('https://cdn.jsdelivr.net/gh/vahid-r/yekan-bakh@master/dist/fonts/woff2/YekanBakh-ExtraBold.woff2') format('woff2'),
+       url('https://cdn.jsdelivr.net/gh/vahid-r/yekan-bakh@master/dist/fonts/woff/YekanBakh-ExtraBold.woff') format('woff');
+}
+
+/* Base Font Configuration */
+:root {
+  --app-font-family: 'Yekan Bakh', 'Vazirmatn', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+body {
+  font-family: var(--app-font-family);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.font-yekan {
+  font-family: 'Yekan Bakh', 'IRANYekan', 'Yekan', 'Vazirmatn', -apple-system, BlinkMacSystemFont, sans-serif !important;
+}
+
+.font-vazir {
+  font-family: 'Vazirmatn', 'Vazir', -apple-system, BlinkMacSystemFont, sans-serif !important;
+}
+
+.font-shabnam {
+  font-family: 'Shabnam', 'Vazirmatn', -apple-system, BlinkMacSystemFont, sans-serif !important;
+}
+
+/* Custom scrollbars for high density tables */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Print Styles for Reports */
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+  .print-container {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  table {
+    page-break-inside: auto;
+  }
+  tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
+  }
+}
