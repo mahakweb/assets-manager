@@ -36,6 +36,8 @@ export interface Organization {
 
 export interface Employee {
   id: number;
+  organizationId?: number;       // شناسه سازمان
+  organizationName?: string;     // نام سازمان
   fullName: string;              // نام و نام خانوادگی
   jobTitle: string;              // سمت
   unit: string;                  // واحد
@@ -50,6 +52,8 @@ export interface Employee {
 
 export interface Asset {
   id: number;
+  organizationId?: number;       // شناسه سازمان
+  organizationName?: string;     // نام سازمان
   assetType: string;             // نوع دارایی
   brandModel: string;            // برند و مدل
   propertyCode: string;          // کد اموال
@@ -70,6 +74,8 @@ export interface Asset {
 
 export interface SystemItem {
   id: number;
+  organizationId?: number;       // شناسه سازمان
+  organizationName?: string;     // نام سازمان
   systemName: string;            // نام سامانه
   systemType: string;            // نوع سامانه
   isInternetFacing: string;      // تحت اینترنت (بله/خیر)

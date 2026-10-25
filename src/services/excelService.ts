@@ -46,6 +46,8 @@ const EMP_HEADERS_MAP: Record<string, keyof Employee> = {
   'ایمیل': 'email',
   'تاریخ شروع به کار در این واحد و سمت': 'startDate',
   'تاریخ شروع به کار': 'startDate',
+  'سازمان': 'organizationName',
+  'نام سازمان': 'organizationName',
   'توضیحات': 'description'
 };
 
@@ -53,6 +55,8 @@ const EMP_HEADERS_MAP: Record<string, keyof Employee> = {
 const ASSET_HEADERS_MAP: Record<string, keyof Asset> = {
   'ردیف': 'id',
   'شناسه': 'id',
+  'سازمان': 'organizationName',
+  'نام سازمان': 'organizationName',
   'نوع دارایی': 'assetType',
   'نوع تجهیز': 'assetType',
   'برند و مدل': 'brandModel',
@@ -86,6 +90,8 @@ const ASSET_HEADERS_MAP: Record<string, keyof Asset> = {
 const SYSTEM_HEADERS_MAP: Record<string, keyof SystemItem> = {
   'ردیف': 'id',
   'شناسه': 'id',
+  'سازمان': 'organizationName',
+  'نام سازمان': 'organizationName',
   'نام سامانه': 'systemName',
   'نوع سامانه': 'systemType',
   'تحت اینترنت': 'isInternetFacing',
@@ -265,6 +271,107 @@ export const exportSingleTableToExcel = (
   const ws = XLSX.utils.json_to_sheet(rows);
   XLSX.utils.book_append_sheet(wb, ws, sheetName);
   XLSX.writeFile(wb, filename);
+};
+
+/**
+ * Export complete 4-sheet dossier for a single organization
+ */
+export const exportSingleOrganizationDossier = (
+  org: Organization,
+  db: FullDatabase,
+  filename?: string
+): void => {
+  const wb = XLSX.utils.book_new();
+
+  // Sheet 1: مشخصات سازمان
+  const orgRows = [{
+    'ردیف': org.id,
+    'نام سازمان': org.name,
+    'حوزه فعالیت': org.activityField,
+    'سطح / رده سازمانی': org.orgLevel,
+    'شناسه ملی': org.nationalId,
+    'آدرس': org.address,
+    'شهر': org.city,
+    'استان': org.province,
+    'تلفن': org.phone,
+    'فکس': org.fax,
+    'ایمیل': org.email,
+    'وبسایت': org.website,
+    'تعداد کارمندان': org.employeeCount,
+    'ip اینترنتی': org.publicIp,
+    'دامنه اصلی': org.mainDomain,
+    'توضیحات': org.description
+  }];
+  const orgWs = XLSX.utils.json_to_sheet(orgRows);
+  XLSX.utils.book_append_sheet(wb, orgWs, 'مشخصات سازمان');
+
+  // Sheet 2: تجهیزات سازمان
+  const orgAssets = db.assets.filter(a => a.organizationId === org.id || a.organizationName === org.name);
+  const assetRows = orgAssets.map(ast => ({
+    'ردیف': ast.id,
+    'نوع دارایی': ast.assetType,
+    'برند و مدل': ast.brandModel,
+    'کد اموال': ast.propertyCode,
+    'ip آدرس': ast.ipAddress,
+    'آدرس مک': ast.macAddress,
+    'محل استقرار': ast.placementLocation,
+    'شهرستان': ast.county,
+    'سیستم عامل': ast.operatingSystem,
+    'نسخه Firmware': ast.firmwareVersion,
+    'تاریخ خرید': ast.purchaseDate,
+    'تاریخ پایان گارانتی': ast.warrantyEndDate,
+    'سطح اهمیت': ast.importanceLevel,
+    'وضعیت پشتیبانی': ast.supportStatus,
+    'وضعیت ۱': ast.healthStatus,
+    'توضیحات': ast.description
+  }));
+  const assetWs = XLSX.utils.json_to_sheet(assetRows.length > 0 ? assetRows : [{ 'پیام': 'هیچ تجهیزی برای این سازمان ثبت نشده است' }]);
+  XLSX.utils.book_append_sheet(wb, assetWs, 'لیست تجهیزات');
+
+  // Sheet 3: سامانه‌های سازمان
+  const orgSystems = db.systems.filter(s => s.organizationId === org.id || s.organizationName === org.name);
+  const sysRows = orgSystems.map(sys => ({
+    'ردیف': sys.id,
+    'نام سامانه': sys.systemName,
+    'نوع سامانه': sys.systemType,
+    'تحت اینترنت': sys.isInternetFacing,
+    'دامنه یا ip': sys.domainOrIp,
+    'ip داخلی': sys.internalIp,
+    'سیستم عامل': sys.operatingSystem,
+    'نوع دیتابیس': sys.databaseType,
+    'شرکت پیمانکار': sys.contractor,
+    'مسئول سامانه': sys.systemManager,
+    'وضعیت بکاپ': sys.backupStatus,
+    'احرازهویت چندمرحلهای': sys.mfaEnabled,
+    'مانیتورینگ': sys.monitoring,
+    'وضعیت امنیت': sys.securityStatus,
+    'تاریخ آخرین تست امنیت': sys.lastSecurityTestDate,
+    'تاریخ انقضا SSL': sys.sslExpiryDate,
+    'توضیحات': sys.description
+  }));
+  const sysWs = XLSX.utils.json_to_sheet(sysRows.length > 0 ? sysRows : [{ 'پیام': 'هیچ سامانه‌ای برای این سازمان ثبت نشده است' }]);
+  XLSX.utils.book_append_sheet(wb, sysWs, 'سامانه‌ها و سرویس‌ها');
+
+  // Sheet 4: کارکنان سازمان
+  const orgEmps = db.employees.filter(e => e.organizationId === org.id || e.organizationName === org.name);
+  const empRows = orgEmps.map(emp => ({
+    'ردیف': emp.id,
+    'نام و نام خانوادگی': emp.fullName,
+    'سمت': emp.jobTitle,
+    'واحد': emp.unit,
+    'محل کار': emp.workplace,
+    'کدملی': emp.nationalCode,
+    'موبایل': emp.mobile,
+    'تلفن ثابت': emp.landline,
+    'ایمیل': emp.email,
+    'تاریخ شروع به کار': emp.startDate,
+    'توضیحات': emp.description
+  }));
+  const empWs = XLSX.utils.json_to_sheet(empRows.length > 0 ? empRows : [{ 'پیام': 'هیچ کارمندی برای این سازمان ثبت نشده است' }]);
+  XLSX.utils.book_append_sheet(wb, empWs, 'لیست کارکنان');
+
+  const finalName = filename || `شناسنامه_جامع_${org.name.replace(/\s+/g, '_')}.xlsx`;
+  XLSX.writeFile(wb, finalName);
 };
 
 /**
